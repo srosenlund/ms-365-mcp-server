@@ -1,0 +1,34 @@
+name: auto-update
+on:
+  schedule:
+    - cron: '23 4 * * 1'   # mandag 04:23 UTC
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Merge upstream (Softeria)
+        id: merge
+        run: |
+          git config user.name "auto-update"
+          git config user.email "auto-update@users.noreply.github.com"
+          git remote add upstream https://github.com/Softeria/ms-365-mcp-server.git
+          git fetch upstream
+          BEFORE=$(git rev-parse HEAD)
+          if ! git merge --no-edit upstream/main; then
+            echo "::error::Merge-konflikt med upstream — kraever manuel resolution"
+            git merge --abort; exit 1
+          fi
+          AFTER=$(git rev-parse HEAD)
+          [ "$BEFORE" != "$AFTER" ] && echo "changed=true" >> $GITHUB_OUTPUT || echo "changed=false" >> $GITHUB_OUTPUT
+      - name: Push + trigger build
+        if: steps.merge.outputs.changed == 'true'
+        env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        run: |
+          git push origin HEAD:main
+          gh workflow run docker-publish.yml --repo ${{ github.repository }}
