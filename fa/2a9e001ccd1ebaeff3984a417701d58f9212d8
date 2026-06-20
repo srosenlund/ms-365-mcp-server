@@ -1,0 +1,24 @@
+src/default-query-params.ts
+  s_b8b1b6448a368b::t_9f69477f0ec9e1 1-20
+src/graph-tools.ts
+  s_b8b1b6448a368b::t_df449c295a2488 19
+  s_b8b1b6448a368b::t_3e86e58b00cdf2 451-453
+test/default-query-params.test.ts
+  s_b8b1b6448a368b::t_c6480866cc5f7e 1-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "fa2a9e001ccd1ebaeff3984a417701d58f9212d8",
+  "prompts": {},
+  "sessions": {
+    "s_b8b1b6448a368b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a273a67d-d80c-4542-b699-2f4057a23a39",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Stefan Rosenlund <mail@stefanrosenlund.dk>"
+    }
+  }
+}
